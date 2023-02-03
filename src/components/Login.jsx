@@ -8,7 +8,6 @@ export default class Login extends Component {
     super();
     this.state = {
       login: '',
-      apiResponse: false,
       trigger: false,
     };
   }
@@ -25,11 +24,16 @@ export default class Login extends Component {
 
   render() {
     const { history } = this.props;
-    const { login, trigger, apiResponse } = this.state;
+    const { login, trigger } = this.state;
     return (
       <div data-testid="page-login">
         Login
-        <input type="text" data-testid="login-name-input" onChange={ this.handleChange } name="login" />
+        <input
+          type="text"
+          data-testid="login-name-input"
+          onChange={ this.handleChange }
+          name="login"
+        />
         <button
           data-testid="login-submit-button"
           onClick={ async () => {
