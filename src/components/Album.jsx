@@ -1,7 +1,7 @@
 import React, { Component } from 'react';
 import Header from './Header';
 import getMusics from '../services/musicsAPI';
-import { addSong } from '../services/favoriteSongsAPI';
+import { addSong, getFavoriteSongs } from '../services/favoriteSongsAPI';
 
 export default class Album extends Component {
   constructor() {
@@ -14,13 +14,22 @@ export default class Album extends Component {
 
   componentDidMount() {
     this.setMusicState();
+    this.handleFavoriteSongs();
   }
 
   setMusicState = async () => {
     const { match: { params } } = this.props;
-    console.log(params);
+    // console.log(params);
     const getAlbum = await getMusics(params.id);
     this.setState((prev) => ({ musics: [...prev.musics, ...getAlbum] }));
+  };
+
+  handleFavoriteSongs = async () => {
+    const gettingFavSongs = await getFavoriteSongs();
+    console.log(getFavoriteSongs);
+    gettingFavSongs.forEach(({ trackName }) => {
+      this.setState({ [trackName]: true });
+    });
   };
 
   handleChange = ({ target }) => {
@@ -37,11 +46,12 @@ export default class Album extends Component {
     const { musics, loading } = this.state;
     return (
       <div data-testid="page-album">
-        {console.log(musics)}
+        {/* {console.log(musics)} */}
         <Header />
         {!loading && musics.map((musica, index) => {
           const { artistName, collectionName, trackName, previewUrl, trackId,
           } = musica;
+          const { state } = this;
           if (index === 0) {
             return (
               <div key={ index }>
@@ -67,13 +77,14 @@ export default class Album extends Component {
                   data-testid={ `checkbox-music-${trackId}` }
                   id={ trackId }
                   name={ trackName }
-                  value={ musica }
+                  value={ index }
                   type="checkbox"
-                  checked={ this.state[trackName] }
-                  onClick={ async (event) => {
+                  checked={ state[trackName] }
+                  onChange={ async (event) => {
                     this.handleChange(event);
+                    console.log(event.target.value);
                     this.setState({ loading: true });
-                    await addSong(event.target.value);
+                    await addSong(musics[event.target.value]);
                     this.setState({ loading: false });
                   } }
                 />
