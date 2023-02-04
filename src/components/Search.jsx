@@ -82,7 +82,6 @@ export default class Search extends Component {
               key={ index }
             >
               <p>{`Resultado de álbuns de: ${saveArtistName}`}</p>
-              {/* {console.log('alo')} */}
               <img src={ album.artworkUrl100 } alt="" />
               <p>{album.collectionName}</p>
               <Link
