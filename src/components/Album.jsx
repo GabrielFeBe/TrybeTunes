@@ -25,7 +25,9 @@ export default class Album extends Component {
   };
 
   handleFavoriteSongs = async () => {
+    this.setState({ loading: true });
     const gettingFavSongs = await getFavoriteSongs();
+    this.setState({ loading: false });
     console.log(getFavoriteSongs);
     gettingFavSongs.forEach(({ trackName }) => {
       this.setState({ [trackName]: true });
