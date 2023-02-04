@@ -1,12 +1,14 @@
 import React, { Component } from 'react';
 import Header from './Header';
 import getMusics from '../services/musicsAPI';
+import { addSong } from '../services/favoriteSongsAPI';
 
 export default class Album extends Component {
   constructor() {
     super();
     this.state = {
       musics: [],
+      loading: false,
     };
   }
 
@@ -21,14 +23,24 @@ export default class Album extends Component {
     this.setState((prev) => ({ musics: [...prev.musics, ...getAlbum] }));
   };
 
+  handleChange = ({ target }) => {
+    const { name } = target;
+    const value = (target.type === 'checkbox') ? target.checked : target.value;
+    this.setState({
+      [name]: value,
+      // Após alterarmos o estado, chamamos a função que
+      // verificará os erros.
+    }, this.handleError);
+  };
+
   render() {
-    const { musics } = this.state;
+    const { musics, loading } = this.state;
     return (
       <div data-testid="page-album">
         {console.log(musics)}
         <Header />
-        {musics.map((musica, index) => {
-          const { artistName, collectionName, trackName, previewUrl,
+        {!loading && musics.map((musica, index) => {
+          const { artistName, collectionName, trackName, previewUrl, trackId,
           } = musica;
           if (index === 0) {
             return (
@@ -49,9 +61,27 @@ export default class Album extends Component {
                 <code>audio</code>
                 .
               </audio>
+              <label htmlFor={ trackId }>
+                Favorita
+                <input
+                  data-testid={ `checkbox-music-${trackId}` }
+                  id={ trackId }
+                  name={ trackName }
+                  value={ musica }
+                  type="checkbox"
+                  checked={ this.state[trackName] }
+                  onClick={ async (event) => {
+                    this.handleChange(event);
+                    this.setState({ loading: true });
+                    await addSong(event.target.value);
+                    this.setState({ loading: false });
+                  } }
+                />
+              </label>
             </div>
           );
         })}
+        {loading && <h1>Carregando...</h1>}
       </div>
     );
   }
