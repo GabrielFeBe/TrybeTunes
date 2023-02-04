@@ -1,7 +1,7 @@
 import React, { Component } from 'react';
 import Header from './Header';
 import getMusics from '../services/musicsAPI';
-import { addSong, getFavoriteSongs } from '../services/favoriteSongsAPI';
+import { addSong, getFavoriteSongs, removeSong } from '../services/favoriteSongsAPI';
 
 export default class Album extends Component {
   constructor() {
@@ -83,11 +83,19 @@ export default class Album extends Component {
                   type="checkbox"
                   checked={ state[trackName] }
                   onChange={ async (event) => {
-                    this.handleChange(event);
-                    console.log(event.target.value);
-                    this.setState({ loading: true });
-                    await addSong(musics[event.target.value]);
-                    this.setState({ loading: false });
+                    if (state[trackName]) {
+                      this.handleChange(event);
+                      this.setState({ loading: true });
+                      await removeSong(musics[event.target.value]);
+                      this.setState({ loading: false });
+                      console.log('alo');
+                    } else {
+                      this.handleChange(event);
+                      console.log(event.target.value);
+                      this.setState({ loading: true });
+                      await addSong(musics[event.target.value]);
+                      this.setState({ loading: false });
+                    }
                   } }
                 />
               </label>
