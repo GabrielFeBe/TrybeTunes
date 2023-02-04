@@ -8,6 +8,9 @@ export default class Login extends Component {
     super();
     this.state = {
       login: '',
+      email: '',
+      image: '',
+      description: '',
       trigger: false,
     };
   }
@@ -24,7 +27,7 @@ export default class Login extends Component {
 
   render() {
     const { history } = this.props;
-    const { login, trigger } = this.state;
+    const { login, trigger, email, image, description } = this.state;
     return (
       <div data-testid="page-login">
         Login
@@ -34,11 +37,39 @@ export default class Login extends Component {
           onChange={ this.handleChange }
           name="login"
         />
+        <div>
+          Email
+          <input
+            type="text"
+            name="email"
+            value={ email }
+            onChange={ this.handleChange }
+          />
+          <div>
+            Description
+            <textarea
+              type="text"
+              name="description"
+              value={ description }
+              onChange={ this.handleChange }
+            />
+          </div>
+          <div>
+            Image.jpg
+            <input
+              type="text"
+              name="image"
+              onChange={ this.handleChange }
+              value={ image }
+            />
+
+          </div>
+        </div>
         <button
           data-testid="login-submit-button"
           onClick={ async () => {
             this.setState({ trigger: true });
-            await createUser({ name: login });
+            await createUser({ name: login, email, image, description });
             history.push('/search');
             this.setState({ trigger: false });
           } }
