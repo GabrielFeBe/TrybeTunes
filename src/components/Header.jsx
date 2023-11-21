@@ -25,7 +25,7 @@ export default class Header extends Component {
     const { loading, name } = this.state;
     return (
       <header data-testid="header-component">
-        <h1 data-testid="header-user-name">
+        <h1 data-testid="header-user-name" style={ { margin: '0' } }>
           {loading ? 'Carregando...' : `${name.name}`}
         </h1>
         <Link to="/search" data-testid="link-to-search">Search</Link>

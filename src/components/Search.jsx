@@ -11,7 +11,6 @@ export default class Search extends Component {
       arrayOfAlbuns: [],
       trigger: false,
       loading: false,
-      saveArtistName: '',
     };
   }
 
@@ -26,75 +25,77 @@ export default class Search extends Component {
   };
 
   render() {
-    const { bandOrArtist, arrayOfAlbuns, trigger, loading, saveArtistName } = this.state;
+    const { bandOrArtist, arrayOfAlbuns, trigger, loading } = this.state;
     return (
-      <div data-testid="page-search">
+      <div
+        data-testid="page-search"
+        style={ { minHeight: '100vh',
+          display: 'flex',
+          flexDirection: 'column',
+          alignItems: 'center',
+
+        } }
+      >
         <Header />
-        <input
-          type="text"
-          data-testid="search-artist-input"
-          name="bandOrArtist"
-          onChange={ this.handleChange }
-          value={ bandOrArtist }
-        />
-        <button
-          disabled={ bandOrArtist.length < 2 }
-          data-testid="search-artist-button"
-          onClick={ async () => {
-            this.setState({ loading: true });
-            this.setState({ saveArtistName: bandOrArtist });
-            this.setState({ bandOrArtist: '' });
-            const generateArray = await searchAlbumsAPI(bandOrArtist);
-            this.setState((prev) => ({
-              arrayOfAlbuns: [...prev.arrayOfAlbuns, ...generateArray],
-              trigger: true,
-              loading: false }));
+        <main
+          style={ {
+            width: '1000px',
+            display: 'flex',
+            flexDirection: 'column',
+            alignItems: 'center',
+            padding: '20px',
+            height: '500px',
+            overflowY: 'auto',
           } }
         >
-          Pesquisar
+          <div>
+            <input
+              type="text"
+              data-testid="search-artist-input"
+              name="bandOrArtist"
+              onChange={ this.handleChange }
+              value={ bandOrArtist }
+            />
+            <button
+              disabled={ bandOrArtist.length < 2 }
+              data-testid="search-artist-button"
+              onClick={ async () => {
+                this.setState({ loading: true });
+                this.setState({ bandOrArtist: '' });
+                const generateArray = await searchAlbumsAPI(bandOrArtist);
+                this.setState(() => ({
+                  arrayOfAlbuns: [...generateArray],
+                  trigger: true,
+                  loading: false }));
+              } }
+            >
+              Pesquisar
 
-        </button>
-        {loading && <p>Carregando...</p>}
-        {arrayOfAlbuns.length === 0 && trigger && <p> Nenhum álbum foi encontrado</p> }
-        {/* {arrayOfAlbuns.length > 0 && <p><p>{`Resultado de álbuns de: ${arrayOfAlbuns[0].artistName}`}</p></p>} */}
-        {arrayOfAlbuns.map((album, index) => {
-          if (index !== 0 && album.artistName === arrayOfAlbuns[index - 1].artistName) {
-            return (
+            </button>
+          </div>
 
-              <div
-                key={ index }
-              >
-                {console.log('alo')}
-                <img src={ album.artworkUrl100 } alt="" />
-                <p>{album.collectionName}</p>
-                <Link
-                  to={ `/album/${album.collectionId}` }
-                  data-testid={ `link-to-album-${album.collectionId}` }
-                >
-                  link
+          {loading && <p>Carregando...</p>}
+          {arrayOfAlbuns.length === 0 && trigger && <p> Nenhum álbum foi encontrado</p> }
+          {arrayOfAlbuns.length > 0
+        && <p><p>{`Resultado de álbuns de: ${arrayOfAlbuns[0].artistName}`}</p></p>}
+          {arrayOfAlbuns.map((album, index) => (
 
-                </Link>
-              </div>
-            );
-          }
-          return (
             <div
               key={ index }
             >
-              <p>{`Resultado de álbuns de: ${saveArtistName}`}</p>
-              <img src={ album.artworkUrl100 } alt="" />
-              <p>{album.collectionName}</p>
+
               <Link
                 to={ `/album/${album.collectionId}` }
                 data-testid={ `link-to-album-${album.collectionId}` }
               >
-                link
+                <img src={ album.artworkUrl100 } alt="" />
+                <p>{album.collectionName}</p>
 
               </Link>
             </div>
+          ))}
+        </main>
 
-          );
-        })}
       </div>
     );
   }

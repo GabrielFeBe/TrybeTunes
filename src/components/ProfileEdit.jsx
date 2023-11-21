@@ -43,8 +43,6 @@ export default class ProfileEdit extends Component {
     const emailRegex = /^\w+([-+.']\w+)*@\w+([-.]\w+)*\.\w+([-.]\w+)*$/;
     const arrayOfBoll = [login, email, image, description];
     const testOfArray = arrayOfBoll.every((value) => value.length > 1);
-    console.log(testOfArray);
-    console.log(emailRegex.test(email));
     return emailRegex.test(email) && testOfArray;
   };
 
