@@ -42,49 +42,62 @@ export default class Favorites extends Component {
   render() {
     const { loading, favMusics } = this.state;
     return (
-      <div data-testid="page-favorites">
+      <div
+        data-testid="page-favorites"
+        className="page"
+      >
         <Header />
         {loading ? <h1>Carregando...</h1>
-          : favMusics.map((musica, index) => {
-            const { trackName, previewUrl, trackId,
-            } = musica;
-            const { state } = this;
-            return (
-              <div key={ index }>
-                {console.log(state[trackName])}
-                <p>{trackName}</p>
-                <audio data-testid="audio-component" src={ previewUrl } controls>
-                  <track kind="captions" />
-                  O seu navegador não suporta o elemento
-                  {' '}
-                  {' '}
-                  <code>audio</code>
-                  .
-                </audio>
-                <label htmlFor={ trackId }>
-                  Favorita
-                  <input
-                    data-testid={ `checkbox-music-${trackId}` }
-                    id={ trackId }
-                    name={ trackName }
-                    value={ index }
-                    type="checkbox"
-                    checked={ state[trackName] }
-                    onChange={ async (event) => {
-                      if (state[trackName]) {
-                        this.handleChange(event);
-                        this.setState({ loading: true });
-                        await removeSong(favMusics[event.target.value]);
-                        this.setState({ favMusics: await getFavoriteSongs() });
-                        this.setState({ loading: false });
-                      }
-                    } }
-                  />
-                </label>
+          : (
+            <main>
+              <div className="h2-sect-fav">
+                Músicas Favoritas
               </div>
 
-            );
-          })}
+              <div className="favorites-box">
+
+                { favMusics.map((musica, index) => {
+                  const { trackName, previewUrl, trackId,
+                  } = musica;
+                  const { state } = this;
+                  return (
+                    <div key={ index }>
+                      <p>{trackName}</p>
+                      <audio data-testid="audio-component" src={ previewUrl } controls>
+                        <track kind="captions" />
+                        O seu navegador não suporta o elemento
+                        <code>audio</code>
+                        .
+                      </audio>
+                      <label htmlFor={ trackId }>
+                        Favorita
+                        <input
+                          data-testid={ `checkbox-music-${trackId}` }
+                          id={ trackId }
+                          name={ trackName }
+                          value={ index }
+                          type="checkbox"
+                          checked={ state[trackName] }
+                          onChange={ async (event) => {
+                            if (state[trackName]) {
+                              this.handleChange(event);
+                              this.setState({ loading: true });
+                              await removeSong(favMusics[event.target.value]);
+                              this.setState({ favMusics: await getFavoriteSongs() });
+                              this.setState({ loading: false });
+                            }
+                          } }
+                        />
+                      </label>
+                    </div>
+
+                  );
+                }) }
+              </div>
+
+            </main>
+
+          )}
       </div>
 
     );

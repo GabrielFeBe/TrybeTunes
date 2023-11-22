@@ -1,0 +1,17 @@
+@mixin header($value) {
+  width: 100%;
+  background-image: url('../svg/searchBar.svg');
+  height: $value;
+  background-size: cover;
+  display: flex;
+  justify-content: center;
+  align-items: center;
+}
+
+@mixin headerText($fontSize,$fontHeight) {
+  color: $pure-white;
+  line-height:$fontHeight ;
+  font-size: $fontSize;
+  font-weight: 700;
+
+}

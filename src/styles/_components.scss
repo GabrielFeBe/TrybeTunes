@@ -48,13 +48,7 @@ div{
 
 
 .searchSection {
-  width: 100%;
-  background-image: url('../svg/searchBar.svg');
-  height: 25vh;
-  background-size: cover;
-  display: flex;
-  justify-content: center;
-  align-items: center;
+  @include header(25vh);
   gap: 9px;
   input{
     width:400px ;
@@ -63,10 +57,7 @@ div{
     padding: 0;
     border: 0;
     padding-left: 19px;
-    color: $pure-white;
-    line-height: 14.35px;
-    font-size: 14px;
-    font-weight: 700;
+    @include headerText(14px,14.35px);
     &::placeholder{
       color: $pure-white;
     }
@@ -189,4 +180,15 @@ figcaption {
   scroll-snap-type: x mandatory;
   -webkit-overflow-scrolling: touch;
   
+}
+
+.h2-sect-fav {
+  @include header(25vh);
+  @include headerText(20px,20.5px);
+}
+
+.favorites-box {
+  margin: 0 auto;
+  padding-top: 64px;
+  width: 700px;
 }
