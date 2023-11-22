@@ -173,12 +173,26 @@ figcaption {
 
 }
 
+::-webkit-scrollbar {
+  width: 10px;
+  position: fixed;
+}
+
+::-webkit-scrollbar-thumb {
+  background-color: $blue-buttons;
+  border-radius: 6px;
+}
+
+::-webkit-scrollbar-track {
+  background-color: $pure-white;
+}
 .carousel {
   width: 75vw;
   display: flex;
   overflow-x: auto;
   scroll-snap-type: x mandatory;
   -webkit-overflow-scrolling: touch;
+  
   
 }
 
@@ -187,8 +201,46 @@ figcaption {
   @include headerText(20px,20.5px);
 }
 
+.favorite-section {
+  height: 75vh;
+  background-color: $less-white;
+}
+
 .favorites-box {
   margin: 0 auto;
-  padding-top: 64px;
-  width: 700px;
+  height: 50vh;
+  overflow: auto;
+  display: flex;
+  flex-direction: column;
+  gap: 20px;
+  margin-top: 64px;
+  width: 800px;
+}
+
+.songPreview{
+  display: flex;
+  flex-direction: row;
+  justify-content: space-around;
+  align-items: center;
+  width: 788px;
+  height: 62px;
+  border-bottom: 0.85px solid $border-color;
+  audio{
+    width: 371.3px;
+    height: 55.95px;
+    background-color: $pure-white;
+    border-radius: 42.39px;
+    padding: 0;
+
+  }
+
+small {
+  width: 182px;
+  height: 28px;
+  color: $song-text;
+  font-weight: 400;
+  font-size: 14px;
+  line-height: 14.35px;
+}
+
 }
