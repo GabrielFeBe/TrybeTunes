@@ -2,6 +2,7 @@ import React, { Component } from 'react';
 import PropTypes from 'prop-types';
 import { createUser } from '../services/userAPI';
 import logo from '../svg/logo.svg';
+import Loading from './utils/Loading';
 
 const TRES = 3;
 
@@ -30,6 +31,9 @@ export default class Login extends Component {
   render() {
     const { history } = this.props;
     const { login, trigger, email, image, description } = this.state;
+
+    if (trigger) return <Loading />;
+
     return (
       <main data-testid="page-login" className="login-page">
         <div>
@@ -100,7 +104,6 @@ export default class Login extends Component {
             Register
           </button>
         </div>
-        {trigger && <p>Carregando...</p>}
       </main>
     );
   }

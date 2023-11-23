@@ -7,8 +7,97 @@ h2 {
   line-height: 20.5px;
 }
 
-button:disabled{
-  background-color: #C0C3C9;
-  color: #FFFFFF;
-  cursor: not-allowed;
+
+
+.spinner-container {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  background-size: cover;
+  flex-direction: column;
+  height: 100vh;
+  width: 100%;
+  background-image: url('../svg/loading.svg');
+}
+
+.loading-header{
+  font-family: Epilogue;
+  font-size: 49px;
+  font-weight: 400;
+  line-height: 50px;
+  letter-spacing: 0em;
+  text-align: center;
+  
+  margin: 0;
+  padding: 0;
+  color: $pure-white;
+  
+}
+
+.loading-profile {
+  font-family: Epilogue;
+  font-size: 18px;
+  font-weight: 400;
+  line-height: 18px;
+  letter-spacing: 0em;
+  text-align: center;
+  color: $blue-text;
+}
+
+.loading-search {
+  width: 100%;
+  height: 75vh;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  flex-direction: column;
+  .img-notfound {
+    width: 69.04px;
+    height: 69.04px;
+
+  }
+  h2 {
+    padding: 0;
+    margin: 0;
+    padding-top: 37px;
+    font-family: Epilogue;
+    font-size: 49px;
+    font-weight: 400;
+    line-height: 50px;
+    letter-spacing: 0em;
+    text-align: center;
+    color: $loading-gray;
+  }
+}
+
+.page-not-found {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  background-size: cover;
+  width: 100%;
+  height: 100vh;
+  background-image: url('../svg//pageNotFound.svg');
+  h1 {
+    font-family: Epilogue;
+font-size: 122px;
+font-weight: 400;
+line-height: 125px;
+letter-spacing: 0.02em;
+text-align: left;
+color: $blue-text;
+  }
+  h2 {
+    margin: 0;
+    font-family: Epilogue;
+font-size: 37px;
+font-weight: 300;
+line-height: 40px;
+letter-spacing: 0.02em;
+text-align: left;
+color: $blue-buttons;
+width: 300px;
+height: 100px;
+
+  }
 }

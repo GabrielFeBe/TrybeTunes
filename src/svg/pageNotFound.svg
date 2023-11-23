@@ -1,0 +1,45 @@
+<svg width="1280" height="720" viewBox="0 0 1280 720" fill="none" xmlns="http://www.w3.org/2000/svg">
+<g clip-path="url(#clip0_4_20)">
+<rect width="1280" height="720" fill="url(#paint0_linear_4_20)"/>
+<g filter="url(#filter0_f_4_20)">
+<line x1="80.5" y1="197" x2="80.5" y2="299" stroke="#003BE5" stroke-width="9"/>
+<line x1="266.5" y1="197" x2="266.5" y2="299" stroke="#003BE5" stroke-width="9"/>
+<line x1="142.5" y1="165" x2="142.5" y2="331" stroke="#003BE5" stroke-width="9"/>
+<line x1="204.5" y1="136" x2="204.5" y2="360" stroke="#003BE5" stroke-width="9"/>
+</g>
+<g filter="url(#filter1_f_4_20)">
+<circle cx="790.5" cy="379.5" r="215.5" fill="#003BE5"/>
+</g>
+<circle cx="1223" cy="1" r="404.5" stroke="#00D5E2" stroke-width="3"/>
+<g filter="url(#filter2_f_4_20)">
+<line x1="885" y1="496" x2="885" y2="598" stroke="#00D5E2" stroke-width="14"/>
+<line x1="1071" y1="496" x2="1071" y2="598" stroke="#00D5E2" stroke-width="14"/>
+<line x1="947" y1="464" x2="947" y2="630" stroke="#00D5E2" stroke-width="14"/>
+<line x1="1009" y1="435" x2="1009" y2="659" stroke="#00D5E2" stroke-width="14"/>
+</g>
+</g>
+<defs>
+<filter id="filter0_f_4_20" x="61" y="121" width="225" height="254" filterUnits="userSpaceOnUse" color-interpolation-filters="sRGB">
+<feFlood flood-opacity="0" result="BackgroundImageFix"/>
+<feBlend mode="normal" in="SourceGraphic" in2="BackgroundImageFix" result="shape"/>
+<feGaussianBlur stdDeviation="7.5" result="effect1_foregroundBlur_4_20"/>
+</filter>
+<filter id="filter1_f_4_20" x="504" y="93" width="573" height="573" filterUnits="userSpaceOnUse" color-interpolation-filters="sRGB">
+<feFlood flood-opacity="0" result="BackgroundImageFix"/>
+<feBlend mode="normal" in="SourceGraphic" in2="BackgroundImageFix" result="shape"/>
+<feGaussianBlur stdDeviation="35.5" result="effect1_foregroundBlur_4_20"/>
+</filter>
+<filter id="filter2_f_4_20" x="863" y="420" width="230" height="254" filterUnits="userSpaceOnUse" color-interpolation-filters="sRGB">
+<feFlood flood-opacity="0" result="BackgroundImageFix"/>
+<feBlend mode="normal" in="SourceGraphic" in2="BackgroundImageFix" result="shape"/>
+<feGaussianBlur stdDeviation="7.5" result="effect1_foregroundBlur_4_20"/>
+</filter>
+<linearGradient id="paint0_linear_4_20" x1="1257" y1="849" x2="311" y2="259" gradientUnits="userSpaceOnUse">
+<stop stop-color="#003BE5"/>
+<stop offset="1" stop-color="#00D5E2"/>
+</linearGradient>
+<clipPath id="clip0_4_20">
+<rect width="1280" height="720" fill="white"/>
+</clipPath>
+</defs>
+</svg>

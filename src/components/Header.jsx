@@ -1,5 +1,6 @@
 import React, { Component } from 'react';
 import { Link } from 'react-router-dom';
+import { Vortex } from 'react-loader-spinner';
 import { getUser } from '../services/userAPI';
 import logo from '../svg/logo.svg';
 import search from '../svg/icons/search.svg';
@@ -28,7 +29,6 @@ export default class Header extends Component {
   render() {
     const { loading, profileO } = this.state;
 
-    if (loading) return <h1 data-testid="header-user-name">Carregando...</h1>;
     return (
       <header data-testid="header-component">
 
@@ -69,10 +69,26 @@ export default class Header extends Component {
 
           </Link>
         </div>
-        <div className="profile">
-          <img src={ profileO.image } alt="Foto de Perfil" />
-          <h1>{profileO.name}</h1>
-        </div>
+        { loading ? (
+          <h1 className="loading-profile profile">
+            <Vortex
+              visible
+              height="40"
+              width="40"
+              ariaLabel="vortex-loading"
+              wrapperStyle={ {} }
+              wrapperClass="vortex-wrapper"
+              colors={
+                ['#00D5E2', '#00D5E2', '#00D5E2', '#00D5E2', '#00D5E2', '#00D5E2']
+              }
+            />
+            Carregando...
+          </h1>)
+          : (
+            <div className="profile">
+              <img src={ profileO.image } alt="Foto de Perfil" />
+              <h1>{profileO.name}</h1>
+            </div>)}
       </header>
     );
   }

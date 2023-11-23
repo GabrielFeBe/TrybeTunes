@@ -63,12 +63,11 @@ export default class ProfileEdit extends Component {
                 <input
                   type="text"
                   id="link"
-                  namel="link"
+                  name="newImage"
                   data-testid="edit-input-image"
                   placeholder="Insira um link"
                   value={ newImage }
                   onChange={ this.handleChange }
-                  name="image"
                 />
 
               </label>
@@ -117,7 +116,10 @@ export default class ProfileEdit extends Component {
                   data-testid="edit-button-save"
                   disabled={ !this.handleValidation() }
                   onClick={ () => {
-                    updateUser({ name: login, email, newImage, description });
+                    updateUser({ name: login,
+                      email,
+                      image: newImage,
+                      description });
                     push('/profile');
                   } }
                 >

@@ -4,6 +4,8 @@ import searchAlbumsAPI from '../services/searchAlbumsAPI';
 import searchWhite from '../svg/icons/searchWhite.svg';
 import Button from './search/Button';
 import Album from './search/Album';
+import LoadingSearch from './utils/LoadingSearch';
+import DidNotFoundAlbum from './utils/DidNotFoundAlbum';
 
 export default class Search extends Component {
   constructor() {
@@ -28,11 +30,11 @@ export default class Search extends Component {
   };
 
   searchingForAlbum = async () => {
-    const { bandOrArtist } = this.state;
-    const generateArray = await searchAlbumsAPI(bandOrArtist);
-    this.setState({ artistNameSaved: bandOrArtist });
     this.setState({ loading: true });
+    const { bandOrArtist } = this.state;
+    this.setState({ artistNameSaved: bandOrArtist });
     this.setState({ bandOrArtist: '' });
+    const generateArray = await searchAlbumsAPI(bandOrArtist);
     this.setState(() => ({
       arrayOfAlbuns: generateArray,
       trigger: true,
@@ -79,13 +81,13 @@ export default class Search extends Component {
 
           <section className="albumsSection">
 
-            {loading && <p>Carregando...</p>}
+            {loading && <LoadingSearch />}
             {arrayOfAlbuns.length === 0 && trigger
-            && <h2> Nenhum álbum foi encontrado</h2> }
-            {arrayOfAlbuns.length > 0
+            && loading === false && <DidNotFoundAlbum /> }
+            {arrayOfAlbuns.length > 0 && loading === false
         && <h2>{`Resultado de álbuns de: ${artistNameSaved}`}</h2>}
             <div className="carousel">
-              {arrayOfAlbuns.map((album, index) => (
+              { !loading && arrayOfAlbuns.map((album, index) => (
 
                 <figure
                   key={ index }
