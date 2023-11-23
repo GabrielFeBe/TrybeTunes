@@ -28,7 +28,7 @@ a{
   font-weight: 400;
   font-size: 16px;
   &:hover{
-    color: $selected-hover;
+    font-weight: 700;
   }
 }
 div{
@@ -241,6 +241,70 @@ small {
   font-weight: 400;
   font-size: 14px;
   line-height: 14.35px;
+  display: flex;
+  align-items: center;
+  }
+
 }
 
+.h2-profile-sec {
+  @include header(25vh);
+  @include headerText(20px,20.5px);
+}
+
+.profile-section{
+  height: 75vh;
+  background-color: $less-white;
+  position: relative;
+  img {
+    box-shadow: -9px 8px 8px 0px #00000033;
+    width: 240px;
+    position: absolute;
+  height: 240px;
+  border-radius: 240px;
+    top: -120px;
+    left: 76px;
+  }
+  a {
+    cursor: pointer;
+    text-decoration: none;
+    height: 40px;
+    line-height: 14.35px;
+    font-size: 14px;
+    font-weight: 700;
+    text-align: center;
+    color: $pure-white;
+    width: 152px;
+    background-color: $blue-text;
+    border-radius: 100px;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    &:hover{
+      background-color: color.scale($blue-text, $lightness: 10%);
+    }
+  }
+  div {
+    margin-top: 30px;
+    position: absolute;
+    left: 352px;
+    display: flex;
+    flex-direction: column;
+    gap: 10px;
+    h2 {
+      color: $album-text;
+      font-size: 16px;
+      line-height: 24px;
+      text-align: left;
+      display: flex;
+      font-weight: 700;
+      flex-direction: column;
+      small {
+        font-weight: 400;
+        font-size: 14px;
+        line-height: 21px;
+      }
+
+    }
+  }
 }

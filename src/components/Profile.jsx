@@ -27,21 +27,46 @@ export default class Profile extends Component {
   render() {
     const { loading, useInfo } = this.state;
     return (
-      <div data-testid="page-profile">
+      <div data-testid="page-profile" className="page">
         <Header />
         {loading && <h1>Carregando...</h1>}
         {loading || (
-          <div>
-            <p>{useInfo.name}</p>
-            <img
-              src={ useInfo.image }
-              alt={ useInfo.name }
-              data-testid="profile-image"
-            />
-            <p>{useInfo.email}</p>
-            <p>{useInfo.description}</p>
-            <Link to="/profile/edit">Editar perfil</Link>
-          </div>)}
+          <main>
+            <div className="h2-profile-sec" />
+            <section className="profile-section">
+              <img
+                src={ useInfo.image }
+                alt={ useInfo.name }
+                data-testid="profile-image"
+              />
+              <div>
+                <h2>
+                  Name
+                  <small>
+                    {useInfo.name}
+                  </small>
+                </h2>
+                <h2>
+                  Email
+                  <small>
+                    {useInfo.email}
+                  </small>
+                </h2>
+                <h2>
+                  Description
+                  <small>
+
+                    {useInfo.description}
+                  </small>
+
+                </h2>
+                <Link to="/profile/edit">Editar perfil</Link>
+              </div>
+
+            </section>
+          </main>
+
+        )}
       </div>
     );
   }
