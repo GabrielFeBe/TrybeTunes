@@ -1,6 +1,7 @@
 import React, { Component } from 'react';
 import PropTypes from 'prop-types';
 import { createUser } from '../services/userAPI';
+import logo from '../svg/logo.svg';
 
 const TRES = 3;
 
@@ -30,58 +31,69 @@ export default class Login extends Component {
     const { history } = this.props;
     const { login, trigger, email, image, description } = this.state;
     return (
-      <div data-testid="page-login">
-        Login
-        <input
-          type="text"
-          data-testid="login-name-input"
-          onChange={ this.handleChange }
-          name="login"
-        />
+      <main data-testid="page-login" className="login-page">
         <div>
-          Email
-          <input
-            type="text"
-            name="email"
-            value={ email }
-            onChange={ this.handleChange }
-          />
-          <div>
-            Description
-            <textarea
-              type="text"
-              name="description"
-              value={ description }
-              onChange={ this.handleChange }
-            />
-          </div>
-          <div>
-            Image.jpg
+          <img src={ logo } alt="" />
+          <label htmlFor="login">
+
+            Login
             <input
               type="text"
-              name="image"
+              id="login"
+              value={ login }
+              data-testid="login-name-input"
               onChange={ this.handleChange }
-              value={ image }
+              name="login"
             />
+          </label>
 
-          </div>
+          <label htmlFor="email">
+            Email
+            <input
+              id="email"
+              type="text"
+              name="email"
+              value={ email }
+              onChange={ this.handleChange }
+            />
+            <label htmlFor="description">
+              Description
+              <textarea
+                type="text"
+                name="description"
+                value={ description }
+                onChange={ this.handleChange }
+                id="description"
+              />
+            </label>
+            <label htmlFor="link">
+              Image.jpg
+              <input
+                id="link"
+                type="text"
+                name="image"
+                onChange={ this.handleChange }
+                value={ image }
+              />
+
+            </label>
+          </label>
+          <button
+            data-testid="login-submit-button"
+            onClick={ async () => {
+              this.setState({ trigger: true });
+              await createUser({ name: login, email, image, description });
+              history.push('/search');
+              this.setState({ trigger: false });
+            } }
+            disabled={ login.length < TRES }
+          >
+            Entrar
+
+          </button>
         </div>
-        <button
-          data-testid="login-submit-button"
-          onClick={ async () => {
-            this.setState({ trigger: true });
-            await createUser({ name: login, email, image, description });
-            history.push('/search');
-            this.setState({ trigger: false });
-          } }
-          disabled={ login.length < TRES }
-        >
-          Entrar
-
-        </button>
-        {console.log(this.props)}
         {trigger && <p>Carregando...</p>}
-      </div>
+      </main>
     );
   }
 }

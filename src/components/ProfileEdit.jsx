@@ -53,7 +53,7 @@ export default class ProfileEdit extends Component {
         {loading && <h1>Carregando...</h1>}
         {!loading && (
           <main>
-            <div className="h2-profile-sec" />
+            <div className="h2-default-section" />
             <section className="profile-section edit-profile">
               <img src={ image } alt="person" />
               <label

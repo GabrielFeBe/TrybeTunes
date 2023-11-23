@@ -3,6 +3,7 @@ import PropTypes from 'prop-types';
 import Header from './Header';
 import getMusics from '../services/musicsAPI';
 import { addSong, getFavoriteSongs, removeSong } from '../services/favoriteSongsAPI';
+import Song from './utils/Song';
 
 export default class Album extends Component {
   constructor() {
@@ -10,6 +11,7 @@ export default class Album extends Component {
     this.state = {
       musics: [],
       loading: false,
+      albumInfo: {},
     };
   }
 
@@ -20,8 +22,8 @@ export default class Album extends Component {
 
   setMusicState = async () => {
     const { match: { params } } = this.props;
-    // console.log(params);
     const getAlbum = await getMusics(params.id);
+    this.setState({ albumInfo: getAlbum[0] });
     this.setState((prev) => ({ musics: [...prev.musics, ...getAlbum] }));
   };
 
@@ -29,7 +31,6 @@ export default class Album extends Component {
     this.setState({ loading: true });
     const gettingFavSongs = await getFavoriteSongs();
     this.setState({ loading: false });
-    console.log(getFavoriteSongs);
     gettingFavSongs.forEach(({ trackName }) => {
       this.setState({ [trackName]: true });
     });
@@ -40,68 +41,68 @@ export default class Album extends Component {
     const value = (target.type === 'checkbox') ? target.checked : target.value;
     this.setState({
       [name]: value,
-      // Após alterarmos o estado, chamamos a função que
-      // verificará os erros.
     }, this.handleError);
   };
 
+  addOrRemoveSong = async (event, trackName) => {
+    const { musics } = this.state;
+    const { state } = this;
+    if (state[trackName]) {
+      this.handleChange(event);
+      this.setState({ loading: true });
+      await removeSong(musics[event.target.value]);
+      this.setState({ loading: false });
+    } else {
+      this.handleChange(event);
+      console.log(event.target.value);
+      this.setState({ loading: true });
+      await addSong(musics[event.target.value]);
+      this.setState({ loading: false });
+    }
+  };
+
   render() {
-    const { musics, loading } = this.state;
+    const { musics, loading, albumInfo } = this.state;
     return (
-      <div data-testid="page-album">
-        {/* {console.log(musics)} */}
+      <div data-testid="page-album" className="page">
         <Header />
-        {!loading && musics.map((musica, index) => {
-          const { artistName, collectionName, trackName, previewUrl, trackId,
-          } = musica;
-          const { state } = this;
-          if (index === 0) {
-            return (
-              <div key={ index }>
-                <div data-testid="artist-name">{artistName}</div>
-                <div data-testid="album-name">{collectionName}</div>
-              </div>
-            );
-          }
-          return (
-            <div key={ index }>
-              <p>{trackName}</p>
-              <audio data-testid="audio-component" src={ previewUrl } controls>
-                <track kind="captions" />
-                O seu navegador não suporta o elemento
-                <code>audio</code>
-                .
-              </audio>
-              <label htmlFor={ trackId }>
-                Favorita
-                <input
-                  data-testid={ `checkbox-music-${trackId}` }
-                  id={ trackId }
-                  name={ trackName }
-                  value={ index }
-                  type="checkbox"
-                  checked={ state[trackName] }
-                  onChange={ async (event) => {
-                    if (state[trackName]) {
-                      this.handleChange(event);
-                      this.setState({ loading: true });
-                      await removeSong(musics[event.target.value]);
-                      this.setState({ loading: false });
-                      console.log('alo');
-                    } else {
-                      this.handleChange(event);
-                      console.log(event.target.value);
-                      this.setState({ loading: true });
-                      await addSong(musics[event.target.value]);
-                      this.setState({ loading: false });
-                    }
-                  } }
-                />
-              </label>
+        <main>
+          <div className="h2-default-section" />
+          <section className="album-section">
+            <img src={ albumInfo.artworkUrl100 } alt="" />
+            <div className="album-name">
+              <h2>{albumInfo.collectionName}</h2>
+              <small>{albumInfo.artistName}</small>
             </div>
-          );
-        })}
-        {loading && <h1>Carregando...</h1>}
+            <section className="songs-album-section">
+
+              {!loading && musics.map((musica, index) => {
+                const { trackName, previewUrl, trackId,
+                } = musica;
+                const { state } = this;
+                if (index === 0) {
+                  return;
+                }
+                return (
+                  <div key={ index }>
+                    <Song
+                      trackId={ trackId }
+                      index={ index }
+                      songPreview={ previewUrl }
+                      name={ trackName }
+                      handleChange={ this.addOrRemoveSong }
+                      isFavorite={ !!state[trackName] }
+                    />
+                  </div>
+                );
+              })}
+            </section>
+
+            {loading && <h1>Carregando...</h1>}
+          </section>
+
+        </main>
+
       </div>
     );
   }

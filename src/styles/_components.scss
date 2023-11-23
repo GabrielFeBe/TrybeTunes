@@ -196,17 +196,13 @@ figcaption {
   
 }
 
-.h2-sect-fav {
-  @include header(25vh);
-  @include headerText(20px,20.5px);
-}
 
 .favorite-section {
   height: 75vh;
   background-color: $less-white;
 }
 
-.favorites-box {
+.favorites-box , .songs-album-section{
   margin: 0 auto;
   height: 50vh;
   overflow: auto;
@@ -247,9 +243,12 @@ small {
 
 }
 
-.h2-profile-sec {
+
+
+.h2-default-section {
   @include header(25vh);
   @include headerText(20px,20.5px);
+
 }
 
 .profile-section{
@@ -257,7 +256,7 @@ small {
   background-color: $less-white;
   position: relative;
   img {
-    @include imageOverHeader2();
+    @include imageOverHeader2(240px, 240px,-120px, 76px,240px );
   }
   a, button {
     cursor: pointer;
@@ -357,4 +356,66 @@ form {
 
   }
 
+}
+
+.album-section {
+  position: relative;
+  display: flex;
+  justify-items: center;
+  align-items: center;
+  img {
+    @include imageOverHeader2(240px, 240px,-120px, 76px,12px );
+  }
+}
+
+.album-name {
+  h2 {
+    color: $pure-white;
+    font-weight: 700;
+    font-size: 20px;
+    line-height: 30px;
+  }
+  small {
+    font-size: 14px;
+    font-weight: 400;
+    line-height: 21px;
+    letter-spacing: 0em;
+    text-align: left;
+
+  }
+  position: absolute;
+  left: 362px;
+  color: $pure-white;
+  top: -120px;
+}
+
+.songs-album-section {
+
+margin-top: 150px;
+}
+
+.login-page {
+  width: 100%;
+  height: 100vh;
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  background-image: url('../svg/searchBar.svg');
+  background-size: cover;
+  div {
+    background-color: $pure-white;
+    width: 750px;
+    height: 450px;
+    border-radius: 20px;
+    position: relative;
+
+    img {
+      width: 187.19px;
+      height: 104.89px;
+      top: 25%;
+      left: 50%;
+      transform: translate(-50%, -50%);
+      position: absolute;
+    }
+  }
 }

@@ -32,7 +32,7 @@ export default class Profile extends Component {
         {loading && <h1>Carregando...</h1>}
         {loading || (
           <main>
-            <div className="h2-profile-sec" />
+            <div className="h2-default-section" />
             <section className="profile-section">
               <img
                 src={ useInfo.image }
@@ -55,10 +55,8 @@ export default class Profile extends Component {
                 <h2>
                   Description
                   <small>
-
                     {useInfo.description}
                   </small>
-
                 </h2>
                 <Link to="/profile/edit">Editar perfil</Link>
               </div>

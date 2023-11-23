@@ -64,7 +64,7 @@ export default class Favorites extends Component {
         {loading ? <h1>Carregando...</h1>
           : (
             <main>
-              <div className="h2-sect-fav">
+              <div className="h2-default-section">
                 Músicas Favoritas
               </div>
               <section className="favorite-section">
