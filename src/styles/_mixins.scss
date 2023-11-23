@@ -1,3 +1,5 @@
+@use 'sass:color';
+
 @mixin header($value) {
   width: 100%;
   background-image: url('../svg/searchBar.svg');
@@ -24,4 +26,27 @@
     top: $top;
     left: $left;
 }
+
+
+@mixin buttonDefault($width,$height,$borderRadius)
+{
+  cursor: pointer;
+  text-decoration: none;
+  height: $height;
+  line-height: 14.35px;
+  font-size: 14px;
+  font-weight: 700;
+  text-align: center;
+  color: $pure-white;
+  width: $width;
+  background-color: $blue-text;
+  border-radius: $borderRadius;
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  &:hover{
+    background-color: color.scale($blue-text, $lightness: 10%);
+  }
+}
+
 

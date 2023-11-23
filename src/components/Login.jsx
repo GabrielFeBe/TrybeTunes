@@ -56,27 +56,28 @@ export default class Login extends Component {
               value={ email }
               onChange={ this.handleChange }
             />
-            <label htmlFor="description">
-              Description
-              <textarea
-                type="text"
-                name="description"
-                value={ description }
-                onChange={ this.handleChange }
-                id="description"
-              />
-            </label>
-            <label htmlFor="link">
-              Image.jpg
-              <input
-                id="link"
-                type="text"
-                name="image"
-                onChange={ this.handleChange }
-                value={ image }
-              />
+          </label>
 
-            </label>
+          <label htmlFor="description">
+            Description
+            <textarea
+              type="text"
+              name="description"
+              value={ description }
+              onChange={ this.handleChange }
+              id="description"
+            />
+          </label>
+          <label htmlFor="link">
+            Image.jpg
+            <input
+              id="link"
+              type="text"
+              name="image"
+              onChange={ this.handleChange }
+              value={ image }
+            />
+
           </label>
           <button
             data-testid="login-submit-button"
@@ -90,6 +91,13 @@ export default class Login extends Component {
           >
             Entrar
 
+          </button>
+          <button
+            onClick={
+              () => history.push('/register')
+            }
+          >
+            Register
           </button>
         </div>
         {trigger && <p>Carregando...</p>}

@@ -259,23 +259,7 @@ small {
     @include imageOverHeader2(240px, 240px,-120px, 76px,240px );
   }
   a, button {
-    cursor: pointer;
-    text-decoration: none;
-    height: 40px;
-    line-height: 14.35px;
-    font-size: 14px;
-    font-weight: 700;
-    text-align: center;
-    color: $pure-white;
-    width: 152px;
-    background-color: $blue-text;
-    border-radius: 100px;
-    display: flex;
-    justify-content: center;
-    align-items: center;
-    &:hover{
-      background-color: color.scale($blue-text, $lightness: 10%);
-    }
+   @include buttonDefault(152px,40px, 100px); 
   }
   div,  form{
     margin-top: 30px;
@@ -408,11 +392,19 @@ margin-top: 150px;
     height: 450px;
     border-radius: 20px;
     position: relative;
+    display: flex;
+    flex-direction: column;
+    justify-content: center;
+    align-items: center;
 
+    label { 
+      display: flex;
+      flex-direction: column;
+    }
     img {
       width: 187.19px;
       height: 104.89px;
-      top: 25%;
+      top: 15%;
       left: 50%;
       transform: translate(-50%, -50%);
       position: absolute;
