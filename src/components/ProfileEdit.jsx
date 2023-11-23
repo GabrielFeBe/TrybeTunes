@@ -12,6 +12,7 @@ export default class ProfileEdit extends Component {
       email: '',
       image: '',
       description: '',
+      newImage: '',
     };
   }
 
@@ -25,7 +26,6 @@ export default class ProfileEdit extends Component {
     const { name, email, image, description } = userInfo;
     this.setState({ loading: false });
     this.setState({ login: name, email, image, description });
-    console.log(name);
   };
 
   handleChange = ({ target }) => {
@@ -33,70 +33,101 @@ export default class ProfileEdit extends Component {
     const value = (target.type === 'checkbox') ? target.checked : target.value;
     this.setState({
       [name]: value,
-      // Após alterarmos o estado, chamamos a função que
-      // verificará os erros.
     }, this.handleError);
   };
 
   handleValidation = () => {
-    const { login, email, image, description } = this.state;
+    const { login, email, description, newImage } = this.state;
     const emailRegex = /^\w+([-+.']\w+)*@\w+([-.]\w+)*\.\w+([-.]\w+)*$/;
-    const arrayOfBoll = [login, email, image, description];
+    const arrayOfBoll = [login, email, newImage, description];
     const testOfArray = arrayOfBoll.every((value) => value.length > 1);
     return emailRegex.test(email) && testOfArray;
   };
 
   render() {
-    const { loading, login, email, description, image } = this.state;
+    const { loading, login, email, description, image, newImage } = this.state;
     const { history: { push } } = this.props;
     return (
-      <div data-testid="page-profile-edit">
+      <div data-testid="page-profile-edit" className="page">
         <Header />
         {loading && <h1>Carregando...</h1>}
         {!loading && (
-          <div>
-            <input
-              type="text"
-              value={ login }
-              data-testid="edit-input-name"
-              name="login"
-              onChange={ this.handleChange }
-            />
-            <input
-              type="text"
-              name="email"
-              value={ email }
-              onChange={ this.handleChange }
-              data-testid="edit-input-email"
-            />
-            <textarea
-              name="description"
-              id="description"
-              cols="30"
-              rows="10"
-              onChange={ this.handleChange }
-              value={ description }
-              data-testid="edit-input-description"
-            />
-            <input
-              type="text"
-              data-testid="edit-input-image"
-              value={ image }
-              onChange={ this.handleChange }
-              name="image"
-            />
-            <button
-              data-testid="edit-button-save"
-              disabled={ !this.handleValidation() }
-              onClick={ () => {
-                updateUser({ name: login, email, image, description });
-                push('/profile');
-              } }
-            >
-              Save
+          <main>
+            <div className="h2-profile-sec" />
+            <section className="profile-section edit-profile">
+              <img src={ image } alt="person" />
+              <label
+                htmlFor="link"
+                className="input-image"
+              >
+                <input
+                  type="text"
+                  id="link"
+                  namel="link"
+                  data-testid="edit-input-image"
+                  placeholder="Insira um link"
+                  value={ newImage }
+                  onChange={ this.handleChange }
+                  name="image"
+                />
 
-            </button>
-          </div>
+              </label>
+              <form action="">
+                <label htmlFor="login">
+                  Name
+                  <small>Fell free to put your username</small>
+                  <input
+                    id="login"
+                    type="text"
+                    value={ login }
+                    data-testid="edit-input-name"
+                    name="login"
+                    onChange={ this.handleChange }
+                    placeholder="example_name"
+                  />
+                </label>
+                <label htmlFor="email">
+                  Email
+                  <small>Chose an email that you use daily</small>
+                  <input
+                    id="email"
+                    type="text"
+                    name="email"
+                    value={ email }
+                    onChange={ this.handleChange }
+                    data-testid="edit-input-email"
+                    placeholder="example_email@email.com"
+                  />
+                </label>
+                <label htmlFor="description">
+                  Description
+                  <textarea
+                    name="description"
+                    id="description"
+                    cols="30"
+                    rows="10"
+                    onChange={ this.handleChange }
+                    value={ description }
+                    data-testid="edit-input-description"
+                    placeholder="Tell us about yourself"
+                  />
+                </label>
+
+                <button
+                  data-testid="edit-button-save"
+                  disabled={ !this.handleValidation() }
+                  onClick={ () => {
+                    updateUser({ name: login, email, newImage, description });
+                    push('/profile');
+                  } }
+                >
+                  Save
+                </button>
+              </form>
+
+            </section>
+          </main>
+
         )}
 
       </div>

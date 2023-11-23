@@ -257,15 +257,9 @@ small {
   background-color: $less-white;
   position: relative;
   img {
-    box-shadow: -9px 8px 8px 0px #00000033;
-    width: 240px;
-    position: absolute;
-  height: 240px;
-  border-radius: 240px;
-    top: -120px;
-    left: 76px;
+    @include imageOverHeader2();
   }
-  a {
+  a, button {
     cursor: pointer;
     text-decoration: none;
     height: 40px;
@@ -284,14 +278,14 @@ small {
       background-color: color.scale($blue-text, $lightness: 10%);
     }
   }
-  div {
+  div,  form{
     margin-top: 30px;
     position: absolute;
     left: 352px;
     display: flex;
     flex-direction: column;
     gap: 10px;
-    h2 {
+    h2, label {
       color: $album-text;
       font-size: 16px;
       line-height: 24px;
@@ -307,4 +301,60 @@ small {
 
     }
   }
+}
+
+
+.edit-profile {
+
+  .input-image {
+    position: absolute;
+    left: 95px;
+    top: 133px;
+    border: 0;
+    input {
+      width: 192px;
+      height: 37px;
+      border-radius: 2px;
+      border: 1px solid $gray-border;
+      font-size: 12px;
+      font-weight: 400;
+      line-height: 35px;
+      letter-spacing: 0em;
+      text-align: center;
+      background-color: $less-white;
+
+    }
+  }
+}
+
+
+form {
+  textarea,input {
+    border: 0;
+    background-color: $pure-white;
+    border-bottom: 1px solid $gray-border;  
+    font-size: 14px;
+    font-weight: 400;
+    line-height: 21px;
+    letter-spacing: 0em;
+    text-align: left;
+    color: $album-text;
+
+  }
+  small {
+    padding-bottom: 6px;
+  }
+  textarea{
+    resize: none;
+
+    width: 490px;
+    height: 106px;
+  }
+
+  input {
+    padding:   8px 0 8px 8px;
+    width: 288px;
+
+  }
+
 }
