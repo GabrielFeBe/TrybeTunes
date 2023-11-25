@@ -7,6 +7,7 @@ import Search from './components/Search';
 import Favorites from './components/Favorites';
 import ProfileEdit from './components/ProfileEdit';
 import NotFound from './components/NotFound';
+import Register from './components/Register';
 
 class App extends React.Component {
   render() {
@@ -18,6 +19,7 @@ class App extends React.Component {
         <Route path="/favorites" component={ Favorites } />
         <Route exact path="/profile" component={ Profile } />
         <Route path="/profile/edit" component={ ProfileEdit } />
+        <Route path="/register" component={ Register } />
         <Route path="*" component={ NotFound } />
       </Switch>
     );

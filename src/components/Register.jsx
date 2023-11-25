@@ -3,11 +3,14 @@ import PropTypes from 'prop-types';
 import Loading from './utils/Loading';
 import LoginOrRegister from './forms/LoginOrRegister';
 
-export default class Login extends Component {
+export default class Register extends Component {
   constructor() {
     super();
     this.state = {
+      login: '',
       email: '',
+      image: '',
+      description: '',
       trigger: false,
       password: '',
     };
@@ -25,12 +28,24 @@ export default class Login extends Component {
 
   render() {
     const { history } = this.props;
-    const { trigger, email, password } = this.state;
+    const { login, trigger, email, image, description, password } = this.state;
 
     if (trigger) return <Loading />;
 
     return (
       <LoginOrRegister history={ history }>
+        <label htmlFor="login">
+
+          Login
+          <input
+            type="text"
+            id="login"
+            value={ login }
+            data-testid="login-name-input"
+            onChange={ this.handleChange }
+            name="login"
+          />
+        </label>
 
         <label htmlFor="email">
           Email
@@ -43,6 +58,26 @@ export default class Login extends Component {
           />
         </label>
 
+        <label htmlFor="description">
+          Description
+          <textarea
+            type="text"
+            name="description"
+            value={ description }
+            onChange={ this.handleChange }
+            id="description"
+          />
+        </label>
+        <label htmlFor="link">
+          Image.jpg
+          <input
+            id="link"
+            type="text"
+            name="image"
+            onChange={ this.handleChange }
+            value={ image }
+          />
+        </label>
         <label htmlFor="password">
           Password
           <input
@@ -59,7 +94,7 @@ export default class Login extends Component {
   }
 }
 
-Login.propTypes = {
+Register.propTypes = {
   history: PropTypes.shape({
     push: PropTypes.func,
   }).isRequired,

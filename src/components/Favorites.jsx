@@ -1,9 +1,12 @@
 import React, { Component } from 'react';
+import { connect } from 'react-redux';
+import PropTypes from 'prop-types';
 import Header from './Header';
 import { getFavoriteSongs, removeSong } from '../services/favoriteSongsAPI';
 import Song from './utils/Song';
+import { fetchProfile } from '../redux/actions';
 
-export default class Favorites extends Component {
+class Favorites extends Component {
   constructor() {
     super();
     this.state = {
@@ -13,6 +16,8 @@ export default class Favorites extends Component {
   }
 
   componentDidMount() {
+    const { dispatch, profileSucess } = this.props;
+    if (!profileSucess.userId) dispatch(fetchProfile());
     this.gettingFavoriteSongs();
   }
 
@@ -98,3 +103,21 @@ export default class Favorites extends Component {
     );
   }
 }
+
+const mapStateToProps = (state) => ({
+  fetchLoading: state.profileReducer.profileLoading,
+  profileSucess: state.profileReducer.profileInformations,
+  fetchError: state.profileReducer.profileError,
+});
+
+Favorites.propTypes = {
+  dispatch: PropTypes.func.isRequired,
+  profileSucess: PropTypes.shape({
+    userId: PropTypes.string,
+    name: PropTypes.string,
+    email: PropTypes.string,
+    image: PropTypes.string,
+  }).isRequired,
+};
+
+export default connect(mapStateToProps)(Favorites);
