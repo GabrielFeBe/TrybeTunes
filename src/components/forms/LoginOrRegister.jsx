@@ -3,6 +3,7 @@ import PropTypes from 'prop-types';
 import { createUser } from '../../services/userAPI';
 import logo from '../../svg/logo.svg';
 import Loading from '../utils/Loading';
+import { creatingUser, login } from '../../services/trybetunesBe';
 
 // const TRES = 3;
 
@@ -18,15 +19,19 @@ export default class LoginOrRegister extends Component {
     const { history } = this.props;
     event.preventDefault();
     const formData = new FormData(event.currentTarget);
-    const objBody = { login: formData.get('login'),
+    const objBody = { name: formData.get('login'),
       email: formData.get('email'),
       description: formData.get('description'),
       image: formData.get('image'),
       password: formData.get('password') };
-    console.log(objBody);
-    // this.setState({ trigger: true });
-    // history.push('/search');
-    // this.setState({ trigger: false });
+    try {
+      this.setState({ trigger: true });
+      await creatingUser(objBody);
+      history.push('/');
+      this.setState({ trigger: false });
+    } catch (error) {
+      console.log(error);
+    }
   };
 
   submitFormLogin = async (event) => {
@@ -37,6 +42,9 @@ export default class LoginOrRegister extends Component {
       password: formData.get('password') };
     console.log(objBody);
     // this.setState({ trigger: true });
+    const response = await login(objBody);
+    const { token } = response;
+    console.log(response);
     // history.push('/search');
     // this.setState({ trigger: false });
   };
