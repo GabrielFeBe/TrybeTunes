@@ -1,41 +1,46 @@
 import React, { Component } from 'react';
 import { Link } from 'react-router-dom';
 import { Vortex } from 'react-loader-spinner';
-import { getUser } from '../services/userAPI';
+import { connect } from 'react-redux';
+import Cookies from 'js-cookie';
+import decode from 'jwt-decode';
+import PropTypes from 'prop-types';
 import logo from '../svg/logo.svg';
 import search from '../svg/icons/search.svg';
 import favorites from '../svg/icons/favorite.svg';
 import profile from '../svg/icons/profile.svg';
+import { fetchProfile } from '../redux/actions';
 
-export default class Header extends Component {
+class Header extends Component {
   constructor() {
     super();
     this.state = {
-      loading: true,
-      profileO: '',
     };
   }
 
   componentDidMount() {
-    this.getingData();
+    const { dispatch, profileSucess } = this.props;
+    const token = Cookies.get('token');
+    const payload = decode(token);
+    if (!profileSucess.userId) dispatch(fetchProfile(payload.id));
   }
 
-  getingData = async () => {
-    const name = await getUser();
-    this.setState({ loading: false });
-    this.setState({ profileO: name });
-  };
-
   render() {
-    const { loading, profileO } = this.state;
+    const { profileSucess, profileLoading, profileError } = this.props;
+
+    if (profileError) {
+      return (
+        <div>
+          <h1>Erro ao carregar perfil</h1>
+        </div>
+      );
+    }
 
     return (
       <header data-testid="header-component">
-
         <img src={ logo } alt="logo" className="logo" />
         <div>
           <Link to="/search" data-testid="link-to-search">
-            {/* <img src={ search } alt="search" /> */}
             <div
               style={ {
                 backgroundImage: `url(${search})`,
@@ -69,7 +74,7 @@ export default class Header extends Component {
 
           </Link>
         </div>
-        { loading ? (
+        { profileLoading ? (
           <h1 className="loading-profile profile">
             <Vortex
               visible
@@ -86,10 +91,30 @@ export default class Header extends Component {
           </h1>)
           : (
             <div className="profile">
-              <img src={ profileO.image } alt="Foto de Perfil" />
-              <h1>{profileO.name}</h1>
+              <img src={ profileSucess.image } alt="Foto de Perfil" />
+              <h1>{profileSucess.name}</h1>
             </div>)}
       </header>
     );
   }
 }
+
+const mapStateToProps = (state) => ({
+  fetchLoading: state.profileReducer.profileLoading,
+  profileSucess: state.profileReducer.profileInformations,
+  fetchError: state.profileReducer.profileError,
+});
+
+Header.propTypes = {
+  dispatch: PropTypes.func.isRequired,
+  profileSucess: PropTypes.shape({
+    userId: PropTypes.string,
+    name: PropTypes.string,
+    email: PropTypes.string,
+    image: PropTypes.string,
+  }).isRequired,
+  profileLoading: PropTypes.bool.isRequired,
+  profileError: PropTypes.string.isRequired,
+};
+
+export default connect(mapStateToProps)(Header);

@@ -1,13 +1,17 @@
 import React, { Component } from 'react';
 import PropTypes from 'prop-types';
-import { createUser } from '../../services/userAPI';
+import Cookies from 'js-cookie';
+import decode from 'jwt-decode';
+import { connect } from 'react-redux';
 import logo from '../../svg/logo.svg';
 import Loading from '../utils/Loading';
 import { creatingUser, login } from '../../services/trybetunesBe';
+import { fetchProfile } from '../../redux/actions';
 
 // const TRES = 3;
+const SEGUNDOS = 1500;
 
-export default class LoginOrRegister extends Component {
+class LoginOrRegister extends Component {
   constructor() {
     super();
     this.state = {
@@ -35,18 +39,26 @@ export default class LoginOrRegister extends Component {
   };
 
   submitFormLogin = async (event) => {
-    const { history } = this.props;
+    const { history, dispatch } = this.props;
     event.preventDefault();
     const formData = new FormData(event.currentTarget);
     const objBody = { email: formData.get('email'),
       password: formData.get('password') };
     console.log(objBody);
-    // this.setState({ trigger: true });
+    this.setState({ trigger: true });
     const response = await login(objBody);
     const { token } = response;
-    console.log(response);
-    // history.push('/search');
-    // this.setState({ trigger: false });
+    Cookies.set('token', token, { expires: 1 });
+    dispatch(fetchProfile(this.decodingToken(token).id));
+    setTimeout(() => {
+      history.push('/search');
+      this.setState({ trigger: false });
+    }, SEGUNDOS);
+  };
+
+  decodingToken = (token) => {
+    const tokenDecoded = decode(token);
+    return tokenDecoded;
   };
 
   render() {
@@ -97,4 +109,7 @@ LoginOrRegister.propTypes = {
     }),
   }).isRequired,
   children: PropTypes.node.isRequired,
+  dispatch: PropTypes.func.isRequired,
 };
+
+export default connect()(LoginOrRegister);

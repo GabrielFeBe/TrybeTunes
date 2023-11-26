@@ -1,9 +1,14 @@
 import React, { Component } from 'react';
 import PropTypes from 'prop-types';
+import { connect } from 'react-redux';
+import decode from 'jwt-decode';
+import Cookies from 'js-cookie';
 import Header from './Header';
-import { getUser, updateUser } from '../services/userAPI';
+import { updateUser } from '../services/userAPI';
+import LoadingSearch from './utils/LoadingSearch';
+import fetchProfileForPage from '../services/fetchProfileForPage';
 
-export default class ProfileEdit extends Component {
+class ProfileEdit extends Component {
   constructor() {
     super();
     this.state = {
@@ -21,11 +26,24 @@ export default class ProfileEdit extends Component {
   }
 
   handeUserInfo = async () => {
-    this.setState({ loading: true });
-    const userInfo = await getUser();
-    const { name, email, image, description } = userInfo;
-    this.setState({ loading: false });
-    this.setState({ login: name, email, image, description });
+    const { profileSucess } = this.props;
+    if (profileSucess.id) {
+      this.setState({ login: profileSucess.name,
+        email: profileSucess.email,
+        image: profileSucess.image,
+        description: profileSucess.description });
+    } else {
+      this.setState({ loading: true });
+      const token = Cookies.get('token');
+      const payload = decode(token);
+      const response = await fetchProfileForPage(payload.id);
+      console.log(response);
+      this.setState({ login: response.name,
+        email: response.email,
+        image: response.image,
+        description: response.description,
+        loading: false });
+    }
   };
 
   handleChange = ({ target }) => {
@@ -50,7 +68,7 @@ export default class ProfileEdit extends Component {
     return (
       <div data-testid="page-profile-edit" className="page">
         <Header />
-        {loading && <h1>Carregando...</h1>}
+        {loading && <LoadingSearch />}
         {!loading && (
           <main>
             <div className="h2-default-section" />
@@ -141,4 +159,19 @@ ProfileEdit.propTypes = {
   history: PropTypes.shape({
     push: PropTypes.func,
   }).isRequired,
+  profileSucess: PropTypes.shape({
+    id: PropTypes.string,
+    name: PropTypes.string,
+    email: PropTypes.string,
+    image: PropTypes.string,
+    description: PropTypes.string,
+  }).isRequired,
 };
+
+const mapStateToProps = (state) => ({
+  fetchLoading: state.profileReducer.profileLoading,
+  profileSucess: state.profileReducer.profileInformations,
+  fetchError: state.profileReducer.profileError,
+});
+
+export default connect(mapStateToProps)(ProfileEdit);

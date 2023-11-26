@@ -1,14 +1,14 @@
 import React, { Component } from 'react';
 import { Link } from 'react-router-dom';
+import { connect } from 'react-redux';
+import PropTypes from 'prop-types';
+import Cookies from 'js-cookie';
 import Header from './Header';
-import { getUser } from '../services/userAPI';
 
-export default class Profile extends Component {
+class Profile extends Component {
   constructor() {
     super();
     this.state = {
-      loading: false,
-      useInfo: {},
     };
   }
 
@@ -17,45 +17,47 @@ export default class Profile extends Component {
   }
 
   handeUserInfo = async () => {
-    this.setState({ loading: true });
-    const userInfo = await getUser();
-    this.setState({ loading: false });
-    this.setState({ useInfo: userInfo });
-    console.log(userInfo);
+    const { dispatch, profileSucess } = this.props;
+
+    if (!profileSucess.id) {
+      const token = Cookies.get('token');
+      const payload = decode(token);
+      dispatch(fetchProfile(payload.id));
+    }
   };
 
   render() {
-    const { loading, useInfo } = this.state;
+    const { profileLoading, profileSucess } = this.props;
     return (
       <div data-testid="page-profile" className="page">
         <Header />
-        {loading && <h1>Carregando...</h1>}
-        {loading || (
+        {profileLoading && <h1>Carregando...</h1>}
+        {profileLoading || (
           <main>
             <div className="h2-default-section" />
             <section className="profile-section">
               <img
-                src={ useInfo.image }
-                alt={ useInfo.name }
+                src={ profileSucess.image }
+                alt={ profileSucess.name }
                 data-testid="profile-image"
               />
               <div>
                 <h2>
                   Name
                   <small>
-                    {useInfo.name}
+                    {profileSucess.name}
                   </small>
                 </h2>
                 <h2>
                   Email
                   <small>
-                    {useInfo.email}
+                    {profileSucess.email}
                   </small>
                 </h2>
                 <h2>
                   Description
                   <small>
-                    {useInfo.description}
+                    {profileSucess.description}
                   </small>
                 </h2>
                 <Link to="/profile/edit">Editar perfil</Link>
@@ -69,3 +71,22 @@ export default class Profile extends Component {
     );
   }
 }
+Profile.propTypes = {
+  dispatch: PropTypes.func.isRequired,
+  profileSucess: PropTypes.shape({
+    id: PropTypes.string,
+    name: PropTypes.string,
+    email: PropTypes.string,
+    image: PropTypes.string,
+    description: PropTypes.string,
+  }).isRequired,
+  profileLoading: PropTypes.bool.isRequired,
+};
+
+const mapStateToProps = (state) => ({
+  fetchLoading: state.profileReducer.profileLoading,
+  profileSucess: state.profileReducer.profileInformations,
+  fetchError: state.profileReducer.profileError,
+});
+
+export default connect(mapStateToProps)(Profile);

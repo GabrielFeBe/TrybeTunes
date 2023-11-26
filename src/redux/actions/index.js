@@ -16,11 +16,11 @@ export const fetchProfileError = (error) => ({
   error,
 });
 
-export function fetchProfile() {
+export function fetchProfile(id) {
   return async (dispach) => {
     dispach(fetchProfileStart());
     try {
-      const response = await fetchProfileS();
+      const response = await fetchProfileS(id);
       dispach(fetchProfileSuccess(response));
     } catch (error) {
       dispach(fetchProfileError(error));
