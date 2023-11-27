@@ -1,6 +1,7 @@
 import { FETCH_PROFILE,
   FETCH_PROFILE_ERROR,
-  FETCH_PROFILE_SUCCESS } from './actions.types';
+  FETCH_PROFILE_SUCCESS,
+  UPDATE_PROFILE_LOCALLY } from './actions.types';
 import fetchProfileS from '../../services/fetchProfile';
 
 export const fetchProfileStart = () => ({
@@ -27,3 +28,7 @@ export function fetchProfile(id) {
     }
   };
 }
+
+export const updateProfileLocally = (
+  profile,
+) => ({ type: UPDATE_PROFILE_LOCALLY, data: profile });

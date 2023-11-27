@@ -4,9 +4,10 @@ import { connect } from 'react-redux';
 import decode from 'jwt-decode';
 import Cookies from 'js-cookie';
 import Header from './Header';
-import { updateUser } from '../services/userAPI';
 import LoadingSearch from './utils/LoadingSearch';
 import fetchProfileForPage from '../services/fetchProfileForPage';
+import { updateProfileLocally } from '../redux/actions';
+import updateProfile from '../services/updateProfile';
 
 class ProfileEdit extends Component {
   constructor() {
@@ -18,6 +19,7 @@ class ProfileEdit extends Component {
       image: '',
       description: '',
       newImage: '',
+      password: '',
     };
   }
 
@@ -37,7 +39,6 @@ class ProfileEdit extends Component {
       const token = Cookies.get('token');
       const payload = decode(token);
       const response = await fetchProfileForPage(payload.id);
-      console.log(response);
       this.setState({ login: response.name,
         email: response.email,
         image: response.image,
@@ -55,16 +56,16 @@ class ProfileEdit extends Component {
   };
 
   handleValidation = () => {
-    const { login, email, description, newImage } = this.state;
+    const { login, email, description, newImage, password } = this.state;
     const emailRegex = /^\w+([-+.']\w+)*@\w+([-.]\w+)*\.\w+([-.]\w+)*$/;
-    const arrayOfBoll = [login, email, newImage, description];
+    const arrayOfBoll = [login, email, newImage, description, password];
     const testOfArray = arrayOfBoll.every((value) => value.length > 1);
     return emailRegex.test(email) && testOfArray;
   };
 
   render() {
-    const { loading, login, email, description, image, newImage } = this.state;
-    const { history: { push } } = this.props;
+    const { loading, login, email, description, image, newImage, password } = this.state;
+    const { history: { push }, dispatch, profileSucess: { id } } = this.props;
     return (
       <div data-testid="page-profile-edit" className="page">
         <Header />
@@ -129,15 +130,30 @@ class ProfileEdit extends Component {
                     placeholder="Tell us about yourself"
                   />
                 </label>
-
+                <label htmlFor="password">
+                  Password
+                  <input
+                    name="password"
+                    id="password"
+                    type="password"
+                    onChange={ this.handleChange }
+                    value={ password }
+                    placeholder="Password"
+                  />
+                </label>
                 <button
                   data-testid="edit-button-save"
+                  type="button"
                   disabled={ !this.handleValidation() }
-                  onClick={ () => {
-                    updateUser({ name: login,
+                  onClick={ async () => {
+                    const userObj = { name: login,
                       email,
                       image: newImage,
-                      description });
+                      description,
+                      password };
+                    const token = Cookies.get('token');
+                    await updateProfile(id, userObj, token);
+                    dispatch(updateProfileLocally(userObj));
                     push('/profile');
                   } }
                 >
@@ -166,6 +182,7 @@ ProfileEdit.propTypes = {
     image: PropTypes.string,
     description: PropTypes.string,
   }).isRequired,
+  dispatch: PropTypes.func.isRequired,
 };
 
 const mapStateToProps = (state) => ({

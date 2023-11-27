@@ -22,7 +22,7 @@ class Header extends Component {
     const { dispatch, profileSucess } = this.props;
     const token = Cookies.get('token');
     const payload = decode(token);
-    if (!profileSucess.userId) dispatch(fetchProfile(payload.id));
+    if (!profileSucess.id) dispatch(fetchProfile(payload.id));
   }
 
   render() {
@@ -108,7 +108,7 @@ const mapStateToProps = (state) => ({
 Header.propTypes = {
   dispatch: PropTypes.func.isRequired,
   profileSucess: PropTypes.shape({
-    userId: PropTypes.string,
+    id: PropTypes.string,
     name: PropTypes.string,
     email: PropTypes.string,
     image: PropTypes.string,

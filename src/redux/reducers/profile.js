@@ -1,6 +1,7 @@
 import { FETCH_PROFILE,
   FETCH_PROFILE_ERROR,
-  FETCH_PROFILE_SUCCESS } from '../actions/actions.types';
+  FETCH_PROFILE_SUCCESS,
+  UPDATE_PROFILE_LOCALLY } from '../actions/actions.types';
 
 const INITIAL_STATE = {
   profileInformations: {},
@@ -10,6 +11,16 @@ const INITIAL_STATE = {
 
 const profileReducer = (state = INITIAL_STATE, action) => {
   switch (action.type) {
+  case UPDATE_PROFILE_LOCALLY:
+    return {
+      ...state,
+      profileInformations: { name: action.data.name,
+        email: action.data.email,
+        description: action.data.description,
+        image: action.data.image,
+        id: state.profileInformations.id,
+        favorites: state.profileInformations.favorites },
+    };
   case FETCH_PROFILE:
     return {
       ...state,
