@@ -1,6 +1,7 @@
+import { apiEndPoint } from './variables';
+
 export const creatingFavorite = async (favorite, token) => {
-  const mockUrl = 'http://localhost:3001/favorites';
-  const response = await fetch(mockUrl, {
+  const response = await fetch(`${apiEndPoint}/favorites`, {
     method: 'POST',
     headers: {
       'Content-Type': 'application/json',
@@ -14,8 +15,7 @@ export const creatingFavorite = async (favorite, token) => {
 };
 
 export const deletingFavorite = async (id, token) => {
-  const mockUrl = `http://localhost:3001/favorites/${id}`;
-  const response = await fetch(mockUrl, {
+  const response = await fetch(`${apiEndPoint}/favorites/${id}`, {
     method: 'DELETE',
     headers: {
       'Content-Type': 'application/json',

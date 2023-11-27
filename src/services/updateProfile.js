@@ -1,6 +1,7 @@
+import { apiEndPoint } from './variables';
+
 export default async function updateProfile(id, data, token) {
-  const mockUrl = `http://localhost:3001/accounts/${id}`;
-  const response = await fetch(mockUrl, {
+  const response = await fetch(`${apiEndPoint}/accounts/${id}`, {
     method: 'PUT',
     headers: {
       'Content-Type': 'application/json',

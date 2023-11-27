@@ -1,6 +1,8 @@
+import { apiEndPoint } from './variables';
+
 export const creatingUser = async (userObj) => {
   try {
-    const response = await fetch('http://localhost:3001/accounts', {
+    const response = await fetch(`${apiEndPoint}/accounts`, {
       method: 'POST',
       body: JSON.stringify(userObj),
       headers: {
@@ -18,7 +20,7 @@ export const creatingUser = async (userObj) => {
 
 export const login = async (userObj) => {
   try {
-    const response = await fetch('http://localhost:3001/auth/login', {
+    const response = await fetch(`${apiEndPoint}/auth/login`, {
       method: 'POST',
       body: JSON.stringify(userObj),
       headers: {

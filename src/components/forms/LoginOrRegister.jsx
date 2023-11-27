@@ -62,7 +62,7 @@ class LoginOrRegister extends Component {
   };
 
   render() {
-    const { history, children } = this.props;
+    const { history, children, className } = this.props;
     const { trigger } = this.state;
     const { location: { pathname } } = history;
     if (trigger) return <Loading />;
@@ -75,25 +75,31 @@ class LoginOrRegister extends Component {
       <main data-testid="page-login" className="login-page">
         <div>
           <img src={ logo } alt="" />
-          <form onSubmit={ objOfFuctions[pathname] }>
-            {history.location.pathname}
-            {children}
-            <button
-              data-testid="login-submit-button"
-              type="submit"
-            >
-              Entrar
+          <form onSubmit={ objOfFuctions[pathname] } className={ className }>
+            <section>
 
-            </button>
-            <button
-              type="button"
-              onClick={ () => {
-                if (pathname === '/register') history.push('/');
-                else { history.push('/register'); }
-              } }
-            >
-              { pathname === '/' ? 'Register' : 'Login'}
-            </button>
+              {children}
+            </section>
+            <section className="button-section">
+
+              <button
+                data-testid="login-submit-button"
+                type="submit"
+              >
+                Entrar
+
+              </button>
+              <button
+                type="button"
+                onClick={ () => {
+                  if (pathname === '/register') history.push('/');
+                  else { history.push('/register'); }
+                } }
+              >
+                { pathname === '/' ? 'Register' : 'Login'}
+              </button>
+            </section>
+
           </form>
         </div>
       </main>
@@ -110,6 +116,7 @@ LoginOrRegister.propTypes = {
   }).isRequired,
   children: PropTypes.node.isRequired,
   dispatch: PropTypes.func.isRequired,
+  className: PropTypes.string.isRequired,
 };
 
 export default connect()(LoginOrRegister);

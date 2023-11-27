@@ -33,7 +33,7 @@ export default class Register extends Component {
     if (trigger) return <Loading />;
 
     return (
-      <LoginOrRegister history={ history }>
+      <LoginOrRegister history={ history } className="register-form">
         <label htmlFor="login">
 
           Login

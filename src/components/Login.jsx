@@ -30,7 +30,7 @@ export default class Login extends Component {
     if (trigger) return <Loading />;
 
     return (
-      <LoginOrRegister history={ history }>
+      <LoginOrRegister history={ history } className="login-form">
 
         <label htmlFor="email">
           Email

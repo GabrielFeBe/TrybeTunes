@@ -1,6 +1,7 @@
+import { apiEndPoint } from './variables';
+
 export default async function fetchProfile(id) {
-  const mockUrl = `http://localhost:3001/accounts/${id}`;
-  const response = await fetch(mockUrl);
+  const response = await fetch(`${apiEndPoint}/accounts/${id}`);
   return response.ok
     ? Promise.resolve(response.json()) : Promise.reject(response.json());
 }
