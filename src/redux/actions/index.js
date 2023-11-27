@@ -32,3 +32,7 @@ export function fetchProfile(id) {
 export const updateProfileLocally = (
   profile,
 ) => ({ type: UPDATE_PROFILE_LOCALLY, data: profile });
+
+export const updatingFavoritesLocally = (
+  favorites,
+) => ({ type: 'UPDATING_FAVORITES_LOCALLY', data: favorites });

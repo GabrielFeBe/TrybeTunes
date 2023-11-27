@@ -1,64 +1,58 @@
 import React, { Component } from 'react';
 import { connect } from 'react-redux';
 import PropTypes from 'prop-types';
+import Cookies from 'js-cookie';
+import decode from 'jwt-decode';
 import Header from './Header';
-import { getFavoriteSongs, removeSong } from '../services/favoriteSongsAPI';
 import Song from './utils/Song';
 import { fetchProfile } from '../redux/actions';
+import LoadingSearch from './utils/LoadingSearch';
 
 class Favorites extends Component {
   constructor() {
     super();
     this.state = {
-      loading: false,
       favMusics: [],
     };
   }
 
   componentDidMount() {
-    const { dispatch, profileSucess } = this.props;
-    if (!profileSucess.userId) dispatch(fetchProfile());
-    this.gettingFavoriteSongs();
+    this.handleFavoriteSongs();
   }
 
-  handleChange = ({ target }) => {
-    const { name } = target;
-    const value = (target.type === 'checkbox') ? target.checked : target.value;
-    this.setState({
-      [name]: value,
-      // Após alterarmos o estado, chamamos a função que
-      // verificará os erros.
-    }, this.handleError);
-  };
+  componentDidUpdate(prevProps) {
+    const { profileSucess } = this.props;
+    // Verifica se profileSucess.favorites existe e se mudou desde a última atualização
+    if (
+      profileSucess
+      && profileSucess.favorites
+      && profileSucess.favorites !== prevProps.profileSucess.favorites
+    ) {
+      this.handleFavoriteSongs();
+    }
+  }
 
-  gettingFavoriteSongs = async () => {
-    this.setState({ loading: true });
-    const handleFavoritSongs = await getFavoriteSongs();
-    this.setState({ loading: false });
-    this.setState(({ favMusics }) => ({
-      favMusics: [...favMusics, ...handleFavoritSongs] }), () => {
-      const { favMusics } = this.state;
-      favMusics.forEach(({ trackName }) => {
-        console.log(trackName);
-        this.setState({ [trackName]: true });
+  handleFavoriteSongs = async () => {
+    const { profileSucess, dispatch } = this.props;
+    if (!profileSucess.favorites) {
+      const token = Cookies.get('token');
+      const payload = decode(token);
+      dispatch(fetchProfile(payload.id));
+    } else {
+      this.setState({ favMusics: profileSucess.favorites });
+      profileSucess.favorites.forEach(({ trackName, id }) => {
+        this.setState({ [trackName]: id });
       });
-    });
-  };
-
-  unfavoritingSong = async (event, track) => {
-    const { favMusics } = this.state;
-    const { state } = this;
-    if (state[track]) {
-      this.handleChange(event);
-      this.setState({ loading: true });
-      await removeSong(favMusics[event.target.value]);
-      this.setState({ favMusics: await getFavoriteSongs() });
-      this.setState({ loading: false });
     }
   };
 
+  removingSongFromState = (trackName) => {
+    this.setState({ [trackName]: false });
+  };
+
   render() {
-    const { loading, favMusics } = this.state;
+    const { favMusics } = this.state;
+    const { fetchLoading } = this.props;
     const { state } = this;
     return (
       <div
@@ -66,7 +60,7 @@ class Favorites extends Component {
         className="page"
       >
         <Header />
-        {loading ? <h1>Carregando...</h1>
+        {fetchLoading ? <LoadingSearch />
           : (
             <main>
               <div className="h2-default-section">
@@ -82,11 +76,11 @@ class Favorites extends Component {
                       <div key={ index }>
                         <Song
                           trackId={ trackId }
-                          index={ index }
+                          favoriteId={ state[trackName] }
                           songPreview={ previewUrl }
+                          removingSongFromState={ this.removingSongFromState }
                           name={ trackName }
-                          handleChange={ this.unfavoritingSong }
-                          isFavorite={ state[trackName] }
+                          isFavorite={ !!state[trackName] }
                         />
                       </div>
 
@@ -113,11 +107,17 @@ const mapStateToProps = (state) => ({
 Favorites.propTypes = {
   dispatch: PropTypes.func.isRequired,
   profileSucess: PropTypes.shape({
-    userId: PropTypes.string,
+    id: PropTypes.string,
     name: PropTypes.string,
     email: PropTypes.string,
     image: PropTypes.string,
+    description: PropTypes.string,
+    favorites: PropTypes.arrayOf(PropTypes.shape({
+      trackName: PropTypes.string,
+    })),
   }).isRequired,
+  fetchLoading: PropTypes.bool.isRequired,
+
 };
 
 export default connect(mapStateToProps)(Favorites);

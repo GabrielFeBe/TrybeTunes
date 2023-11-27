@@ -1,11 +1,14 @@
 import React, { Component } from 'react';
 import PropTypes from 'prop-types';
+import { connect } from 'react-redux';
+import Cookies from 'js-cookie';
+import decode from 'jwt-decode';
 import Header from './Header';
 import getMusics from '../services/musicsAPI';
-import { addSong, getFavoriteSongs, removeSong } from '../services/favoriteSongsAPI';
 import Song from './utils/Song';
+import fetchProfile from '../services/fetchProfile';
 
-export default class Album extends Component {
+class Album extends Component {
   constructor() {
     super();
     this.state = {
@@ -20,49 +23,48 @@ export default class Album extends Component {
     this.handleFavoriteSongs();
   }
 
-  setMusicState = async () => {
-    const { match: { params } } = this.props;
-    const getAlbum = await getMusics(params.id);
-    this.setState({ albumInfo: getAlbum[0] });
-    this.setState((prev) => ({ musics: [...prev.musics, ...getAlbum] }));
-  };
+  componentDidUpdate(prevProps) {
+    const { profileSucess } = this.props;
+    // Verifica se profileSucess.favorites existe e se mudou desde a última atualização
+    if (
+      profileSucess
+      && profileSucess.favorites
+      && profileSucess.favorites !== prevProps.profileSucess.favorites
+    ) {
+      this.handleFavoriteSongs();
+    }
+  }
 
   handleFavoriteSongs = async () => {
-    this.setState({ loading: true });
-    const gettingFavSongs = await getFavoriteSongs();
-    this.setState({ loading: false });
-    gettingFavSongs.forEach(({ trackName }) => {
-      this.setState({ [trackName]: true });
-    });
-  };
-
-  handleChange = ({ target }) => {
-    const { name } = target;
-    const value = (target.type === 'checkbox') ? target.checked : target.value;
-    this.setState({
-      [name]: value,
-    }, this.handleError);
-  };
-
-  addOrRemoveSong = async (event, trackName) => {
-    const { musics } = this.state;
-    const { state } = this;
-    if (state[trackName]) {
-      this.handleChange(event);
-      this.setState({ loading: true });
-      await removeSong(musics[event.target.value]);
-      this.setState({ loading: false });
+    const { profileSucess, dispatch } = this.props;
+    if (!profileSucess.favorites) {
+      const token = Cookies.get('token');
+      const payload = decode(token);
+      dispatch(fetchProfile(payload.id));
     } else {
-      this.handleChange(event);
-      console.log(event.target.value);
-      this.setState({ loading: true });
-      await addSong(musics[event.target.value]);
-      this.setState({ loading: false });
+      profileSucess.favorites.forEach(({ trackName, id }) => {
+        this.setState({ [trackName]: id });
+      });
     }
+  };
+
+  setMusicState = async () => {
+    const { match: { params } } = this.props;
+    this.setState({ loading: true });
+    const getAlbum = await getMusics(params.id);
+
+    this.setState({ albumInfo: getAlbum[0] });
+    this.setState((prev) => ({ musics: [...prev.musics, ...getAlbum] }));
+    this.setState({ loading: false });
+  };
+
+  removingSongFromState = (trackName) => {
+    this.setState({ [trackName]: false });
   };
 
   render() {
     const { musics, loading, albumInfo } = this.state;
+    const { fetchLoading } = this.props;
     return (
       <div data-testid="page-album" className="page">
         <Header />
@@ -76,7 +78,7 @@ export default class Album extends Component {
             </div>
             <section className="songs-album-section">
 
-              {!loading && musics.map((musica, index) => {
+              {!fetchLoading && !loading && musics.map((musica, index) => {
                 const { trackName, previewUrl, trackId,
                 } = musica;
                 const { state } = this;
@@ -87,10 +89,10 @@ export default class Album extends Component {
                   <div key={ index }>
                     <Song
                       trackId={ trackId }
-                      index={ index }
+                      favoriteId={ state[trackName] }
                       songPreview={ previewUrl }
+                      removingSongFromState={ this.removingSongFromState }
                       name={ trackName }
-                      handleChange={ this.addOrRemoveSong }
                       isFavorite={ !!state[trackName] }
                     />
                   </div>
@@ -98,7 +100,7 @@ export default class Album extends Component {
               })}
             </section>
 
-            {loading && <h1>Carregando...</h1>}
+            {loading && fetchLoading && <h1>Carregando...</h1>}
           </section>
 
         </main>
@@ -113,5 +115,19 @@ Album.propTypes = {
     params: PropTypes.shape({
       id: PropTypes.string.isRequired }),
   }).isRequired,
-
+  dispatch: PropTypes.func.isRequired,
+  profileSucess: PropTypes.shape({
+    favorites: PropTypes.arrayOf(PropTypes.shape({
+      trackName: PropTypes.string,
+    })),
+  }).isRequired,
+  fetchLoading: PropTypes.bool.isRequired,
 };
+
+const mapStateToProps = (state) => ({
+  fetchLoading: state.profileReducer.profileLoading,
+  profileSucess: state.profileReducer.profileInformations,
+  fetchError: state.profileReducer.profileError,
+});
+
+export default connect(mapStateToProps)(Album);

@@ -1,7 +1,8 @@
 import { FETCH_PROFILE,
   FETCH_PROFILE_ERROR,
   FETCH_PROFILE_SUCCESS,
-  UPDATE_PROFILE_LOCALLY } from '../actions/actions.types';
+  UPDATE_PROFILE_LOCALLY,
+  UPDATING_FAVORITES_LOCALLY } from '../actions/actions.types';
 
 const INITIAL_STATE = {
   profileInformations: {},
@@ -11,6 +12,11 @@ const INITIAL_STATE = {
 
 const profileReducer = (state = INITIAL_STATE, action) => {
   switch (action.type) {
+  case UPDATING_FAVORITES_LOCALLY:
+    return {
+      ...state,
+      profileInformations: { ...state.profileInformations, favorites: action.data },
+    };
   case UPDATE_PROFILE_LOCALLY:
     return {
       ...state,

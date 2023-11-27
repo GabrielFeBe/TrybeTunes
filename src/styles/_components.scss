@@ -411,3 +411,19 @@ margin-top: 150px;
     }
   }
 }
+
+.button-favorite {
+  background-color: transparent;
+  border: 0;
+  cursor: pointer;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  img {
+    width: 23px;
+    height: 23px;
+    position: static;
+    border-radius: 0;
+    box-shadow: -9px 8px 8px 0px rgba(0, 0, 0, 0);
+  }
+}
